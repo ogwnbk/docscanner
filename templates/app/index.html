@@ -1,14 +1,33 @@
-{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
 
 {% block body %}
   {{ message }}
   <hr>
+  <h1>Docscanner</h1>
   <form method="get" action="">
-    {{ form.errors.your_name }}
-    <label>{{ form.your_name.label }} {{ form.your_name }}</label><br>
+    <div class="form-group row">
+      <label for="{{ form.your_name.label }}" class="col-sm-3 col-form-label">ユーザー名</label>
+      <div class="col-sm-9">
+	{{ form.your_name | add_class:'form-control' }}
+	{% for error in form.errors.your_name %}
+        <span class="help-block">{{ error }}</span>
+	{% endfor %}
+      </div>
+    </div>
 
     {{ form.errors.gender }}
     <label>{{ form.gender.label }} {{ form.gender }}</label><br>
+    <div class="form-group">
+      <label>{{ form.gender.label }} {{ form.gender }}</label><br>
+    </div>
 
     {{ form.errors.memo }}
     <label style="vertical-align: top;">{{ form.memo.label }} {{ form.memo }}</label><br>
