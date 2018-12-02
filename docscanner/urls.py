@@ -19,5 +19,6 @@ import app.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(r'', app.views.index, name='index')
+    path(r'', app.views.form, name='form'),
+    path('complete/', app.views.complete, name = 'complete'),
 ]

@@ -1,14 +1,25 @@
-from django.shortcuts import render
-from . import forms
+from django.shortcuts import render, redirect
+from django.template.context_processors import csrf
+from django.conf import settings
+from app.models import FileNameModel
+import sys, os
+UPLOADE_DIR = os.path.dirname(os.path.abspath(__file__)) + '/static/files/'
 
-def index(request):
-    form = forms.UploadForm(request.GET or None)
-    if form.is_valid():
-        message = 'データ検証に成功しました'
-    else:
-        message = 'データ検証に失敗しました'
-    d = {
-        'form': form,
-        'message': message,
-    }
-    return render(request, 'app/index.html', d)
+def form(request):
+    if request.method != 'POST':
+        return render(request, 'app/index.html')
+
+    file = request.FILES['file']
+    path = os.path.join(UPLOADE_DIR, file.name)
+    destination = open(path, 'wb')
+
+    for chunk in file.chunks():
+        destination.write(chunk)
+
+    insert_data = FileNameModel(file_name = file.name)
+    insert_data.save()
+
+    return redirect('complete')
+
+def complete(request):
+    return render(request, 'app/complete.html')
